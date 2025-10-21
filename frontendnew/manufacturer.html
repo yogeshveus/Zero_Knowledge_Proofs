@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manufacturer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Manufacturer: Register Item</h1>
+
+  <button id="connectBtn">Connect MetaMask</button>
+  <p id="walletAddress"></p>
+
+  <input type="number" id="itemId" placeholder="Item ID">
+  <input type="text" id="metadataHash" placeholder="Metadata Hash">
+  <button id="registerBtn" disabled>Register Item</button>
+  <p id="registerResult"></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="Manufacturer.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Consumer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Consumer: Verify Item</h1>
+
+    <button id="connectBtn">Connect MetaMask</button>
+    <p id="walletAddress"></p>
+
+    <p>Item ID:</p><input type="number" id="verifyItemId" placeholder="Item ID">
+    <p>Public Signals:</p><input type="text" id="publicSignals" placeholder="Public Signals (comma separated)">
+    <br><button id="verifyBtn" disabled>Verify Item</button>
+    <p id="verifyResult"></p>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="Consumer.js"></script>
+</body>
+
+</html>
