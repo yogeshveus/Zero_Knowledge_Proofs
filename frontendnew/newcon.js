@@ -58,11 +58,12 @@ async function verifyItem() {
     // Take c from user input
     const cInput = document.getElementById("inputC").value.trim();
     const cParts = cInput.split(",").map(s => s.trim());
-    if (cParts.length !== 2) {
+    /*if (cParts.length !== 2) {
         alert("Enter both c values separated by a comma");
         return;
     }
-    const c = cParts.map(n => BigInt(n));
+    const c = cParts.map(n => BigInt(n));*/
+    const c = [BigInt(cInput), BigInt(0)];
 
     // Take publicSignals from user input
     const publicSignalInput = document.getElementById("publicSignal").value.trim();
