@@ -1,6 +1,6 @@
 // ------------------ Variables ------------------
 let contract;
-const supplyChainAddress = "0x11EFc070D808F98d89676f87268d4958A9C80E12";
+const supplyChainAddress = "0x04c243f0b828B3e2A304f97c741855a6E26b25a3";
 const abi = [
     "function verifyItem(uint256 itemId, uint[2] calldata a, uint[2][2] calldata b, uint[2] calldata c, uint[] calldata publicSignals) view returns (bool)"
 ];
