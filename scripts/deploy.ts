@@ -5,7 +5,7 @@ async function main() {
   console.log("Deploying contracts with account:", await deployer.getAddress());
 
   // Deploy Verifier first
-  const Verifier = await ethers.getContractFactory("Verifier");
+  const Verifier = await ethers.getContractFactory("CryptoVerifier");
   const verifier = await Verifier.deploy();
   await verifier.deployed();
   console.log("Verifier deployed to:", verifier.address);

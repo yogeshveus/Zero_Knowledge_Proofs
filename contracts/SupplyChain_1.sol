@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import "./IVerifierGroth16.sol";
 
-contract SupplyChain {
+contract SupplyChain_1 {
     address public admin;
     IVerifierGroth16 public verifier;
 
@@ -41,11 +41,9 @@ contract SupplyChain {
     ) external {
         require(!items[itemId].exists, "Already registered");
 
-        // Verify the ZKP using the verifier
         bool valid = verifier.verifyProof(a, b, c, publicSignals);
         require(valid, "Invalid ZKP");
 
-        // Store the item
         Item storage it = items[itemId];
         it.id = itemId;
         it.manufacturer = msg.sender;
@@ -53,7 +51,6 @@ contract SupplyChain {
         it.registeredAt = block.timestamp;
         it.exists = true;
 
-        // Copy public signals
         for (uint i = 0; i < publicSignals.length; i++) {
             it.publicSignals.push(publicSignals[i]);
         }
@@ -62,26 +59,28 @@ contract SupplyChain {
     }
 
     function verifyItem(
-        uint256 itemId,
-        uint[2] calldata a,
-        uint[2][2] calldata b,
-        uint[2] calldata c,
-        uint[] calldata publicSignals
-    ) external view returns (bool) {
-        require(items[itemId].exists, "Item not found");
+    uint256 itemId,
+    uint[2] calldata a,
+    uint[2][2] calldata b,
+    uint[2] calldata c,
+    uint[] calldata publicSignals
+) external view returns (bool) {
+    require(items[itemId].exists, "Item not found");
 
-        Item storage it = items[itemId];
+    Item storage it = items[itemId];
 
-        // Check length
-        require(publicSignals.length == it.publicSignals.length, "Public signals length mismatch");
+    // Check length match
+    require(publicSignals.length == it.publicSignals.length, "Public signals length mismatch");
 
-        // Ensure all public signals match stored signals
-        for (uint i = 0; i < publicSignals.length; i++) {
-            require(publicSignals[i] == it.publicSignals[i], "Public signals mismatch");
-        }
-
-        // Verify the proof
-        bool validProof = verifier.verifyProof(a, b, c, publicSignals);
-        return validProof;
+    // Check each stored public signal equals the input to verify
+    for (uint i = 0; i < publicSignals.length; i++) {
+        require(publicSignals[i] == it.publicSignals[i], "Public signals mismatch");
     }
+
+    // Run proof verification in verifier.sol
+    bool validProof = verifier.verifyProof(a, b, c, publicSignals);
+    
+    return validProof;
+}
+
 }
