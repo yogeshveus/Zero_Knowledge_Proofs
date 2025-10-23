@@ -92,6 +92,6 @@ async function verifyItem() {
         reason = err.reason;
     }
 
-    document.getElementById("verifyResult").innerText = `❌ Failed to verify item: ${reason}`;
+    document.getElementById("verifyResult").innerText = `❌ Failed to verify item ${itemId}: ${reason}`;
 }
 }
