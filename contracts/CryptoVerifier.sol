@@ -14,9 +14,22 @@ contract CryptoVerifier {
             a[0], a[1], b[0][0], b[0][1], b[1][0], b[1][1]
         ));
 
+
         uint256 hashAsUint = uint256(hash1);
 
-        bool valid = (c[0] == hashAsUint && input[0] == a[0] + b[0][0]);
+        bytes32 hash2 = keccak256(abi.encodePacked(
+            hashAsUint, b[1][0], b[0][0]
+        ));
+
+        uint256 hashAsUint2 = uint256(hash2);
+
+        bytes32 hash3 = keccak256(abi.encodePacked(
+            hashAsUint2, a[1]
+        ));
+
+        uint256 hashAsUint3 = uint256(hash3);
+
+        bool valid = (c[0] == hashAsUint && input[0] == hashAsUint3);
         return valid;
     }
 }
