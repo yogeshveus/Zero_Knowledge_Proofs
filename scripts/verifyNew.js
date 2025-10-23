@@ -1,60 +1,30 @@
 const { ethers } = require("hardhat");
 
-function toBytes32(n) {
-    // Convert JS number or BigInt to 32-byte hex string
-    return ethers.utils.hexZeroPad(ethers.BigNumber.from(n).toHexString(), 32);
-}
-
 async function main() {
-    // Example proof numbers
-    const a = [3, 4];
-    const b = [[7, 1], [2, 6]];
-    
-    // 1️⃣ Compute the packed bytes like Solidity's abi.encodePacked
-    const packed =
-        toBytes32(a[0]).slice(2) +
-        toBytes32(a[1]).slice(2) +
-        toBytes32(b[0][0]).slice(2) +
-        toBytes32(b[0][1]).slice(2) +
-        toBytes32(b[1][0]).slice(2) +
-        toBytes32(b[1][1]).slice(2);
-    
-    const packedBytes = "0x" + packed;
+  // 1️⃣ Deploy your verifier
+  const Verifier = await ethers.getContractFactory("CryptoVerifier");
+  const verifier = await Verifier.deploy();
+  await verifier.deployed();
+  console.log("Verifier deployed locally at:", verifier.address);
 
-    // 2️⃣ Compute keccak256 hash
-    const hash = ethers.utils.keccak256(packedBytes);
-    const c0 = ethers.BigNumber.from(hash);
+  // 2️⃣ Deploy other contracts that depend on the verifier
+  const Manufacturer = await ethers.getContractFactory("SupplyChain");
+  const manufacturer = await Manufacturer.deploy(verifier.address);
+  await manufacturer.deployed();
+  console.log("Manufacturer deployed locally at:", manufacturer.address);
 
-    console.log("Computed c[0]:", c0.toString());
+  // 3️⃣ Call functions to simulate usage
+  const a = [456782936, 251678395];
+  const b = [[912679344, 890134667], [790286902, 541656891]];
+  const c = ["5534449593955003150930703514936709279200798574022577126015462283190109123996", "0"];
+  const publicSignals = ["6079013816478556472468214500103295372017352741153461292389486439806701423077"];
 
-    // 3️⃣ Deploy verifier
-    const Verifier = await ethers.getContractFactory("CryptoVerifier");
-    const verifier = await Verifier.deploy();
-    await verifier.deployed();
-    console.log("Verifier deployed to:", verifier.address);
-
-    // 4️⃣ Prepare proof and public input
-    const proof = {
-        a: a,
-        b: b,
-        c: [c0.toString(), 0] // Second element must exist for uint[2]
-    };
-    const publicInput = {
-        input: [a[0] + b[0][0]] // input[0] = a[0] + b[0][0] per verifier logic
-    };
-
-    // 5️⃣ Verify proof
-    const valid = await verifier.verifyProof(
-        proof.a,
-        proof.b,
-        proof.c,
-        publicInput.input
-    );
-
-    console.log("Proof valid?", valid);
+  const itemId = 12345;
+  const result = await verifier.verifyProof(a, b, c, publicSignals);
+  console.log("verifyItem result:", result);
 }
 
-main().catch((err) => {
-    console.error(err);
-    process.exit(1);
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
 });

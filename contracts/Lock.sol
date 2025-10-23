@@ -2,7 +2,41 @@
 pragma solidity ^0.8.19;
 
 contract HashTest {
-    function getHash(uint[2] calldata a, uint[2][2] calldata b) external pure returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(a[0], a[1], b[0][0], b[0][1], b[1][0], b[1][1])));
+    function getHashes(uint[2] calldata a, uint[2][2] calldata b)
+        external
+        pure
+        returns (uint256 hashAsUint, uint256 hashAsUint2, uint256 hashAsUint3)
+    {
+        // First hash
+        bytes32 hash1 = keccak256(
+            abi.encodePacked(
+                a[0],
+                a[1],
+                b[0][0],
+                b[0][1],
+                b[1][0],
+                b[1][1]
+            )
+        );
+        hashAsUint = uint256(hash1);
+
+        // Second hash (depends on hash1 + parts of b)
+        bytes32 hash2 = keccak256(
+            abi.encodePacked(
+                hashAsUint,
+                b[1][0],
+                b[0][0]
+            )
+        );
+        hashAsUint2 = uint256(hash2);
+
+        // Third hash (depends on hash2 + a[1])
+        bytes32 hash3 = keccak256(
+            abi.encodePacked(
+                hashAsUint2,
+                a[1]
+            )
+        );
+        hashAsUint3 = uint256(hash3);
     }
 }
