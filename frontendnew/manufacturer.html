@@ -1,24 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Manufacturer</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #1F2833;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #C5C6C7;
+    }
+
+    h1 {
+      text-align: center;
+      color: #66FCF1;
+      margin-bottom: 30px;
+      font-size: 26px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
+    }
+
+    .container {
+      background-color: #0B0C10;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(102, 252, 241, 0.1);
+      text-align: center;
+      min-width: 380px;
+      border: 1px solid rgba(69, 162, 158, 0.3);
+      transition: box-shadow 0.4s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 0 35px rgba(102, 252, 241, 0.25);
+    }
+
+    #connectBtn,
+    #registerBtn {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    #connectBtn {
+      background: linear-gradient(90deg, #45A29E, #66FCF1);
+      color: #0B0C10;
+      box-shadow: 0 0 12px rgba(102, 252, 241, 0.3);
+    }
+
+    #connectBtn:hover {
+      box-shadow: 0 0 25px rgba(102, 252, 241, 0.6);
+      transform: scale(1.05);
+    }
+
+    #registerBtn {
+      background: linear-gradient(90deg, #66FCF1, #45A29E);
+      color: #0B0C10;
+      box-shadow: 0 0 12px rgba(102, 252, 241, 0.3);
+    }
+
+    #registerBtn:hover:enabled {
+      box-shadow: 0 0 25px rgba(102, 252, 241, 0.6);
+      transform: scale(1.05);
+    }
+
+    #registerBtn:disabled {
+      background: #2E3B45;
+      color: #8a8b8c;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 300px;
+      padding: 10px;
+      border: 1px solid #45A29E;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      background-color: #1F2833;
+      color: #C5C6C7;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #66FCF1;
+      box-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
+      outline: none;
+    }
+
+    p {
+      margin: 10px 0 5px;
+      font-size: 15px;
+      color: #C5C6C7;
+    }
+
+    #walletAddress {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #66FCF1;
+      text-shadow: 0 0 6px rgba(102, 252, 241, 0.3);
+    }
+
+    #registerResult {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #45A29E;
+    }
+
+    /* Style the dropdown */
+    #productDropdown {
+      width: 320px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #45A29E;
+      background-color: #1F2833;
+      color: #C5C6C7;
+      font-size: 15px;
+      font-weight: 500;
+      appearance: none;
+      /* removes default arrow */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    /* Focus effect */
+    #productDropdown:focus {
+      border-color: #66FCF1;
+      box-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
+      outline: none;
+    }
+
+    /* Dropdown arrow styling */
+    #productDropdown::-ms-expand {
+      display: none;
+      /* remove default arrow in IE/Edge */
+    }
+
+    /* Style each option */
+    #productDropdown option {
+      background-color: #0B0C10;
+      /* dark background for options */
+      color: #C5C6C7;
+      /* light text */
+      padding: 10px;
+      font-weight: 500;
+    }
+
+    /* Hover effect inside dropdown (some browsers) */
+    #productDropdown option:hover {
+      background-color: #45A29E;
+      color: #0B0C10;
+    }
+
+    #productImage {
+      display: none;
+      max-width: 300px;
+      /* limit how wide it can grow */
+      max-height: 200px;
+      /* limit height so it stays compact */
+      object-fit: contain;
+      /* keeps the aspect ratio */
+      margin: 15px auto;
+      /* centers the image and adds spacing */
+      display: block;
+    }
+
+    #imageContainer {
+      display: flex;
+      justify-content: center;
+      /* horizontally centers */
+      align-items: center;
+      /* vertically centers (optional) */
+      height: 300px;
+      /* optional: set height if you want vertical centering */
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Manufacturer: Register Item</h1>
+  <div class="container">
+    <h1>Manufacturer: Register Item</h1>
 
-  <button id="connectBtn">Connect MetaMask</button>
-  <p id="walletAddress"></p>
+    <button id="connectBtn">Connect MetaMask</button>
+    <p id="walletAddress"></p>
 
-  <p>Enter item ID</p>
-  <input type="number" id="itemId" placeholder="Item ID"><br>
-  <p>Enter metadata hash</p>
-  <input type="text" id="metadataHash" placeholder="Metadata Hash"><br>
-  <button id="registerBtn" disabled>Register Item</button>
-  <p id="registerResult"></p>
+    <p>Select Product</p>
+    <select id="productDropdown">
+      <option value="">-- Select a product --</option>
+      <option value="Handbag">Designer Handbags</option>
+      <option value="Necklace">Luxury Necklace</option>
+      <option value="Art">Collectible Art</option>
+      <option value="Camera">Vintage Camera</option>
+      <option value="Choco">Rare Chocolates</option>
+      <option value="Shirt">Signed Jersey</option>
+    </select>
+    `
+    <div id="imageContainer">
+      <img id="productImage" src="" alt="Product Preview"
+        style="display:none; width:220px; margin-top:15px; border-radius:10px; box-shadow:0 0 12px rgba(102, 252, 241, 0.2);">
+    </div>
+
+    <p>Current Item ID: <span id="itemIdDisplay">—</span></p>
+
+    <p>Enter metadata hash</p>
+    <input type="text" id="metadataHash" placeholder="Metadata Hash"><br>
+    <button id="registerBtn" disabled>Register Item</button>
+    <p id="registerResult"></p>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="newman.js"></script>
+  <script src="manufacturer.js"></script>
 </body>
+
 </html>
