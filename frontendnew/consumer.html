@@ -2,18 +2,139 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Consumer</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Consumer</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #1F2833;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #C5C6C7;
+    }
+
+    h1 {
+      text-align: center;
+      color: #66FCF1;
+      margin-bottom: 30px;
+      font-size: 26px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(102, 252, 241, 0.4);
+    }
+
+    .container {
+      background-color: #0B0C10;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(102, 252, 241, 0.1);
+      text-align: center;
+      min-width: 380px;
+      border: 1px solid rgba(69, 162, 158, 0.3);
+      transition: box-shadow 0.4s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 0 35px rgba(102, 252, 241, 0.25);
+    }
+
+    #connectBtn,
+    #verifyBtn {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    #connectBtn {
+      background: linear-gradient(90deg, #45A29E, #66FCF1);
+      color: #0B0C10;
+      box-shadow: 0 0 12px rgba(102, 252, 241, 0.3);
+    }
+
+    #connectBtn:hover {
+      box-shadow: 0 0 25px rgba(102, 252, 241, 0.6);
+      transform: scale(1.05);
+    }
+
+    #verifyBtn {
+      background: linear-gradient(90deg, #66FCF1, #45A29E);
+      color: #0B0C10;
+      box-shadow: 0 0 12px rgba(102, 252, 241, 0.3);
+    }
+
+    #verifyBtn:hover:enabled {
+      box-shadow: 0 0 25px rgba(102, 252, 241, 0.6);
+      transform: scale(1.05);
+    }
+
+    #verifyBtn:disabled {
+      background: #2E3B45;
+      color: #8a8b8c;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 300px;
+      padding: 10px;
+      border: 1px solid #45A29E;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      background-color: #1F2833;
+      color: #C5C6C7;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #66FCF1;
+      box-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
+      outline: none;
+    }
+
+    p {
+      margin: 10px 0 5px;
+      font-size: 15px;
+      color: #C5C6C7;
+    }
+
+    #walletAddress {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #66FCF1;
+      text-shadow: 0 0 6px rgba(102, 252, 241, 0.3);
+    }
+
+    #verifyResult {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #45A29E;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container">
     <h1>Consumer: Verify Item</h1>
 
     <button id="connectBtn">Connect MetaMask</button>
     <p id="walletAddress"></p>
 
-    <p>Item ID:</p><input type="number" id="verifyItemId" placeholder="Item ID">
+    <p>Item ID:</p>
+    <input type="number" id="verifyItemId" placeholder="Item ID">
 
     <p>Enter public proof</p>
     <input type="text" id="inputC">
@@ -21,13 +142,13 @@
     <p>Enter public signal</p>
     <input type="text" id="publicSignal">
 
-    <br><button id="verifyBtn" disabled>Verify Item</button>
+    <br>
+    <button id="verifyBtn" disabled>Verify Item</button>
     <p id="verifyResult"></p>
+  </div>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script src="newcon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="newcon.js"></script>
 </body>
 
 </html>

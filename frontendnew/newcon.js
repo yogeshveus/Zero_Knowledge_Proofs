@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById("connectBtn").addEventListener("click", connectWallet);
 });
 
+
 // ------------------ Connect MetaMask ------------------
 async function connectWallet() {
     if (!window.ethereum) {
@@ -44,7 +45,7 @@ async function verifyItem() {
     // Load a and b from JSON
     let proof;
     try {
-        const response = await fetch("newproof.json");
+        const response = await fetch("proofData.json");
         proof = await response.json();
     } catch (err) {
         console.error("Failed to load proof.json:", err);
@@ -75,23 +76,34 @@ async function verifyItem() {
 
     try {
         const isValid = await contract.verifyItem(itemId, a, b, c, publicSignals);
-        document.getElementById("verifyResult").innerText = isValid ? "✅ Valid Proof for item " + itemId : "❌ Invalid Proof for item " + itemId;
-    }catch (err) {
-    console.error(err);
-
-    // Extract only the revert reason
-    let reason = "Transaction failed";
-    if (err.error && err.error.message) {
-        // Ethers v5 revert message format
-        const match = err.error.message.match(/reverted with reason string "(.*)"/);
-        if (match && match[1]) {
-            reason = match[1];
+        //document.getElementById("verifyResult").innerText = isValid ? "Valid Proof for item " + itemId : "Invalid Proof for item " + itemId;
+        const resultElement = document.getElementById("verifyResult");
+        if (isValid) {
+            resultElement.innerText = `Valid Proof for item ${itemId}`;
+            resultElement.style.color = "#00ff7f"; // soft green
+        } else {
+            resultElement.innerText = `Invalid Proof for item ${itemId}`;
+            resultElement.style.color = "#ff4c4c"; // red
         }
-    } else if (err.reason) {
-        // Some errors may have reason directly
-        reason = err.reason;
-    }
 
-    document.getElementById("verifyResult").innerText = `❌ Failed to verify item ${itemId}: ${reason}`;
-}
+    } catch (err) {
+        console.error(err);
+
+        // Extract only the revert reason
+        let reason = "Transaction failed";
+        if (err.error && err.error.message) {
+            // Ethers v5 revert message format
+            const match = err.error.message.match(/reverted with reason string "(.*)"/);
+            if (match && match[1]) {
+                reason = match[1];
+            }
+        } else if (err.reason) {
+            // Some errors may have reason directly
+            reason = err.reason;
+        }
+
+        document.getElementById("verifyResult").innerText = `Failed to verify item ${itemId}: ${reason}`;
+        document.getElementById("verifyResult").style.color = "#ff4c4c"; 
+
+    }
 }

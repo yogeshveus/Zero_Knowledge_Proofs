@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HashTest Contract Interaction</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1F2833;
+      color: #C5C6C7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h2 {
+      color: #66FCF1;
+    }
+    .container {
+      background: rgba(69,162,158,0.1);
+      padding: 20px;
+      border-radius: 16px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(102,252,241,0.3);
+    }
+    input {
+      width: 80%;
+      padding: 8px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+      text-align: center;
+      background: #C5C6C7;
+      color: #1F2833;
+      font-weight: bold;
+    }
+    button {
+      background: #66FCF1;
+      color: #1F2833;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #45A29E;
+      color: #C5C6C7;
+    }
+    .output {
+      margin-top: 20px;
+      background: rgba(69,162,158,0.2);
+      padding: 10px;
+      border-radius: 10px;
+      word-break: break-all;
+      color: #C5C6C7;
+    }
+    #walletAddress {
+      font-size: 0.9em;
+      color: #66FCF1;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Proof Generation</h2>
+  <div class="container">
+    <p>Enter array values for <b>a</b> and <b>b</b></p>
+
+    <input id="a0" type="number" placeholder="a[0]" />
+    <input id="a1" type="number" placeholder="a[1]" /><br>
+
+    <input id="b00" type="number" placeholder="b[0][0]" />
+    <input id="b01" type="number" placeholder="b[0][1]" />
+    <input id="b10" type="number" placeholder="b[1][0]" />
+    <input id="b11" type="number" placeholder="b[1][1]" /><br>
+
+    <button id="connectBtn">Connect Wallet</button>
+    <p id="walletAddress"></p>
+    <button id="getHashes" disabled>Get Hashes</button>
+
+    <div class="output" id="output"></div>
+  </div>
+
+  <!-- ✅ Load ethers.js FIRST -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <!-- ✅ Then your custom script -->
+  <script>
+    // ------------------ Variables ------------------
+    let contract;
+    const contractAddress = "0xEAD57c7F7352c5858706C1ed4b1A8e10bd71bC1b";
+    const abi = [
+      "function getHashes(uint[2] calldata a, uint[2][2] calldata b) external pure returns (uint256,uint256,uint256)"
+    ];
+
+    // ------------------ DOM Loaded ------------------
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById("connectBtn").addEventListener("click", connectWallet);
+      document.getElementById("getHashes").addEventListener("click", getHashes);
+    });
+
+    // ------------------ Connect MetaMask ------------------
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert("MetaMask not found! Please install it.");
+        return;
+      }
+
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        contract = new ethers.Contract(contractAddress, abi, signer);
+
+        document.getElementById("getHashes").disabled = false;
+        document.getElementById("walletAddress").innerText = `Connected: ${accounts[0]}`;
+        document.getElementById("connectBtn").innerText = "Connected";
+
+        console.log("Connected to MetaMask:", accounts[0]);
+      } catch (err) {
+        console.error(err);
+        alert("Failed to connect MetaMask: " + err.message);
+      }
+    }
+
+    // ------------------ Call getHashes ------------------
+    /*async function getHashes() {
+      if (!contract) {
+        alert("Please connect your wallet first.");
+        return;
+      }
+
+      const a = [
+        parseInt(document.getElementById("a0").value),
+        parseInt(document.getElementById("a1").value)
+      ];
+      const b = [
+        [
+          parseInt(document.getElementById("b00").value),
+          parseInt(document.getElementById("b01").value)
+        ],
+        [
+          parseInt(document.getElementById("b10").value),
+          parseInt(document.getElementById("b11").value)
+        ]
+      ];
+
+      try {
+        const result = await contract.getHashes(a, b);
+        document.getElementById("output").innerHTML = `
+          <p><b>Hash 1 (Proof Signal C):</b> ${result[0].toString()}</p>
+          <p><b>Hash 2 (Intermediate Hash):</b> ${result[1].toString()}</p>
+          <p><b>Hash 3 (Public Signal):</b> ${result[2].toString()}</p>
+        `;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+      }
+    }*/
+   // ------------------ Call getHashes ------------------
+async function getHashes() {
+  if (!contract) {
+    alert("Please connect your wallet first.");
+    return;
+  }
+
+  const a = [
+    parseInt(document.getElementById("a0").value),
+    parseInt(document.getElementById("a1").value)
+  ];
+  const b = [
+    [
+      parseInt(document.getElementById("b00").value),
+      parseInt(document.getElementById("b01").value)
+    ],
+    [
+      parseInt(document.getElementById("b10").value),
+      parseInt(document.getElementById("b11").value)
+    ]
+  ];
+
+  try {
+    const result = await contract.getHashes(a, b);
+
+    const c = [
+      result[0].toString(),
+      "0" // placeholder or another value if needed
+    ];
+    const publicSignals = [result[2].toString()];
+
+    const outputData = {
+      a: [a[0].toString(), a[1].toString()],
+      b: [
+        [b[0][0].toString(), b[0][1].toString()],
+        [b[1][0].toString(), b[1][1].toString()]
+      ],
+      c: c,
+      publicSignals: publicSignals
+    };
+
+    document.getElementById("output").innerHTML = `
+      <p><b>Hash 1 (Proof Signal C):</b> ${result[0].toString()}</p>
+      <p><b>Hash 2 (Intermediate Hash):</b> ${result[1].toString()}</p>
+      <p><b>Hash 3 (Public Signal):</b> ${result[2].toString()}</p>
+      <p style="color:#66FCF1;margin-top:10px;">JSON file generated</p>
+    `;
+
+    // Create and trigger file download
+    const blob = new Blob([JSON.stringify(outputData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const aTag = document.createElement("a");
+    aTag.href = url;
+    aTag.download = "proofData.json";
+    aTag.click();
+    URL.revokeObjectURL(url);
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+  }
+}
+
+  </script>
+</body>
+</html>
