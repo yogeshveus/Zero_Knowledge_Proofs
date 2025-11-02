@@ -7,19 +7,15 @@ import { fileURLToPath } from "url";
 const app = express();
 const PORT = 3000;
 
-// Required for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from frontendnew
 const staticPath = path.join(__dirname, "frontendnew");
 app.use(express.static(staticPath));
 console.log("Serving static files from:", staticPath);
 
-// Parse JSON for POST requests (e.g., updating itemIds.json)
 app.use(express.json());
 
-// Generic route to serve any HTML file by name (e.g., /manufacturer -> manufacturer.html)
 app.get("/:page", (req, res) => {
   const page = req.params.page;
   const filePath = path.join(staticPath, `${page}.html`);
@@ -30,7 +26,6 @@ app.get("/:page", (req, res) => {
   }
 });
 
-// Example route for saving itemIds.json
 app.post("/save-itemids", (req, res) => {
   const data = req.body;
   const filePath = path.join(staticPath, "itemIds.json");
@@ -45,7 +40,6 @@ app.post("/save-itemids", (req, res) => {
   });
 });
 
-// Optional: fallback for root
 app.get("/manufacturer", (req, res) => {
   res.sendFile(path.join(__dirname, "frontendnew", "manufacturer.html"));
 });

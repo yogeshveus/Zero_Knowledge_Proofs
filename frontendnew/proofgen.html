@@ -87,25 +87,20 @@
     <div class="output" id="output"></div>
   </div>
 
-  <!-- ✅ Load ethers.js FIRST -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
-  <!-- ✅ Then your custom script -->
   <script>
-    // ------------------ Variables ------------------
     let contract;
     const contractAddress = "0xEAD57c7F7352c5858706C1ed4b1A8e10bd71bC1b";
     const abi = [
       "function getHashes(uint[2] calldata a, uint[2][2] calldata b) external pure returns (uint256,uint256,uint256)"
     ];
 
-    // ------------------ DOM Loaded ------------------
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById("connectBtn").addEventListener("click", connectWallet);
       document.getElementById("getHashes").addEventListener("click", getHashes);
     });
 
-    // ------------------ Connect MetaMask ------------------
     async function connectWallet() {
       if (!window.ethereum) {
         alert("MetaMask not found! Please install it.");
@@ -129,41 +124,6 @@
       }
     }
 
-    // ------------------ Call getHashes ------------------
-    /*async function getHashes() {
-      if (!contract) {
-        alert("Please connect your wallet first.");
-        return;
-      }
-
-      const a = [
-        parseInt(document.getElementById("a0").value),
-        parseInt(document.getElementById("a1").value)
-      ];
-      const b = [
-        [
-          parseInt(document.getElementById("b00").value),
-          parseInt(document.getElementById("b01").value)
-        ],
-        [
-          parseInt(document.getElementById("b10").value),
-          parseInt(document.getElementById("b11").value)
-        ]
-      ];
-
-      try {
-        const result = await contract.getHashes(a, b);
-        document.getElementById("output").innerHTML = `
-          <p><b>Hash 1 (Proof Signal C):</b> ${result[0].toString()}</p>
-          <p><b>Hash 2 (Intermediate Hash):</b> ${result[1].toString()}</p>
-          <p><b>Hash 3 (Public Signal):</b> ${result[2].toString()}</p>
-        `;
-      } catch (err) {
-        console.error(err);
-        document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
-      }
-    }*/
-   // ------------------ Call getHashes ------------------
 async function getHashes() {
   if (!contract) {
     alert("Please connect your wallet first.");
@@ -190,7 +150,7 @@ async function getHashes() {
 
     const c = [
       result[0].toString(),
-      "0" // placeholder or another value if needed
+      "0" 
     ];
     const publicSignals = [result[2].toString()];
 
@@ -211,7 +171,6 @@ async function getHashes() {
       <p style="color:#66FCF1;margin-top:10px;">JSON file generated</p>
     `;
 
-    // Create and trigger file download
     const blob = new Blob([JSON.stringify(outputData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const aTag = document.createElement("a");
